@@ -13,7 +13,7 @@ use Weskiller\Support\Collection;
 /**
  * Class WithAttributes
  * @package Weskiller\Response\Traits
- * @mixin Collection
+ * @mixin
  */
 trait WithAttributes
 {
@@ -30,7 +30,7 @@ trait WithAttributes
      */
     public function __get(string $name)
     {
-        return $this->attributes->offsetGet($name);
+        return $this->getAttributes()->offsetGet($name);
     }
 
     /**
@@ -39,7 +39,7 @@ trait WithAttributes
      */
     public function __set(string $name, $data)
     {
-        $this->attributes->offsetSet($name,$data);
+        $this->getAttributes()->offsetSet($name,$data);
     }
 
     /**
@@ -49,7 +49,7 @@ trait WithAttributes
      */
     public function __isset(string $name)
     {
-        return $this->attributes->offsetExists($name);
+        return $this->getAttributes()->offsetExists($name);
     }
 
     /**
@@ -58,7 +58,7 @@ trait WithAttributes
      */
     public function __unset($name)
     {
-        $this->attributes->offsetUnset($name);
+        $this->getAttributes()->offsetUnset($name);
     }
 
 
@@ -67,6 +67,9 @@ trait WithAttributes
      */
     public function getAttributes(): Collection
     {
+        if($this->attributes = null) {
+            $this->attributes = Collection::make([]);
+        }
         return $this->attributes;
     }
 
@@ -82,6 +85,6 @@ trait WithAttributes
                 'Method %s::%s does not exist.', static::class, $method
             ));
         }
-        return $this->attributes->{$method}(...$parameters);
+        return $this->getAttributes()->{$method}(...$parameters);
     }
 }
