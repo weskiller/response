@@ -5,38 +5,41 @@ declare(strict_types=1);
 namespace Weskiller\Response\Traits;
 
 
-use Illuminate\Support\Arr;
+use BadMethodCallException;
+use Exception;
+use Illuminate\Support\Traits\Macroable;
+use Weskiller\Support\Collection;
 
 /**
  * Class WithAttributes
  * @package Weskiller\Response\Traits
- * @mixin
+ * @mixin Collection
  */
 trait WithAttributes
 {
-    /** @var array */
-    protected array $attributes = [];
+    use Macroable;
+
+    /** @var Collection|null */
+    protected ?Collection $attributes = null;
 
     /**
      * @param string $name
      *
      * @return mixed
+     * @throws Exception
      */
     public function __get(string $name)
     {
-        return Arr::get($this->attributes, $name);
+        return $this->attributes->offsetGet($name);
     }
 
     /**
      * @param string $name
      * @param $data
-     *
-     * @return WithAttributes
      */
     public function __set(string $name, $data)
     {
-        Arr::set($this->attributes, $name, $data);
-        return $this;
+        $this->attributes->offsetSet($name,$data);
     }
 
     /**
@@ -46,23 +49,39 @@ trait WithAttributes
      */
     public function __isset(string $name)
     {
-        return Arr::exists($this->attributes, $name);
+        return $this->attributes->offsetExists($name);
     }
 
     /**
-     * @param $names
+     * @param $name
+     * @return void
      */
-    public function __unset($names)
+    public function __unset($name)
     {
-        Arr::forget($this->attributes, $names);
+        $this->attributes->offsetUnset($name);
     }
 
 
     /**
-     * @return array
+     * @return Collection
      */
-    public function getAttributes(): array
+    public function getAttributes(): Collection
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if(!method_exists($this->attributes,$method)) {
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
+        }
+        return $this->attributes->{$method}(...$parameters);
     }
 }
