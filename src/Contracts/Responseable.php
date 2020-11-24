@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Weskiller\Response;
-
+namespace Weskiller\Response\Contracts;
 
 interface Responseable
 {

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Weskiller\Response;
+namespace Weskiller\Response\Exception;
 
 use Exception;
 use Throwable;
+use Weskiller\Response\Payload;
 
 class ThrowablePayload extends Exception
 {

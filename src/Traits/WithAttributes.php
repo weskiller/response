@@ -25,7 +25,7 @@ abstract class WithAttributes
             return Arr::get($this->attributes, $name);
         }
         throw new AttributeNotExistException(sprintf(
-            'attribute %s::%s does not exist.', static::class, $name
+            'attribute %s->%s does not exist.', static::class, $name
         ));
     }
 

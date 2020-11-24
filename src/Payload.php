@@ -9,19 +9,19 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Stringable;
 use Throwable;
-use Weskiller\Response\Http\HttpJsonResponse;
-use Weskiller\Response\WebSocket\WebSocketResponse;
+use Weskiller\Response\Contracts\Signalable;
+use Weskiller\Response\Exception\ThrowablePayload;
 use Weskiller\Support\Json\Translator;
 
-abstract class Payload implements Stringable, Arrayable, Jsonable
+class Payload implements Stringable, Arrayable, Jsonable
 {
-    /** @var Signal */
-    public Signal $signal;
+    /** @var Signalable */
+    public Signalable $signal;
 
     /** @var array|null */
     public ?array $contents = null;
 
-    public function __construct(Signal $signal, ?array $contents = null)
+    public function __construct(Signalable $signal, ?array $contents = null)
     {
         $this->signal = $signal;
         $this->contents = $contents;
@@ -61,20 +61,10 @@ abstract class Payload implements Stringable, Arrayable, Jsonable
     /**
      * @return array
      */
-    abstract public function toArray(): array;
-
-    /**
-     * @param int $httpStatusCode
-     *
-     * @return HttpJsonResponse
-     */
-    abstract public function toHttpJsonResponse(int $httpStatusCode
-    ): HttpJsonResponse;
-
-    /**
-     * @return WebSocketResponse
-     */
-    abstract public function toWebsocketResponse(): WebSocketResponse;
+    public function toArray(): array
+    {
+        return collect($this->contents)->toArray();
+    }
 
     /**
      * @param $payloads

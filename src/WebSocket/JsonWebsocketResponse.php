@@ -8,8 +8,9 @@ use Illuminate\Contracts\Support\Arrayable;
 use Stringable;
 use Weskiller\Support\Json\Translator;
 
-abstract class JsonWebsocketResponse extends WebSocketResponse implements
-    Stringable, Arrayable
+abstract class JsonWebsocketResponse
+    extends WebSocketResponse
+    implements Stringable, Arrayable
 {
     /**
      * @return string

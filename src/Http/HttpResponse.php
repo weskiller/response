@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Weskiller\Response\Http;
 
 
+use Weskiller\Response\Contracts\Responseable;
 use Weskiller\Response\Payload;
-use Weskiller\Response\Responseable;
 
 abstract class HttpResponse implements Responseable
 {
