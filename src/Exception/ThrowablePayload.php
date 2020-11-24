@@ -39,4 +39,20 @@ class ThrowablePayload extends Exception
     {
         return $this->backtrace[0];
     }
+
+    /**
+     * @return Payload
+     */
+    public function getPayload(): Payload
+    {
+        return $this->payload;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBacktrace(): array
+    {
+        return $this->backtrace;
+    }
 }
