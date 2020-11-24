@@ -33,4 +33,12 @@ trait WithCallable
     {
         return call_user_func(Arr::get($this->callables, $name), ...$args);
     }
+
+    /**
+     * @return array
+     */
+    public function getCallables(): array
+    {
+        return $this->callables;
+    }
 }

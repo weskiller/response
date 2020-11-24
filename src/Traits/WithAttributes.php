@@ -6,28 +6,16 @@ namespace Weskiller\Response\Traits;
 
 
 use Illuminate\Support\Arr;
-use Weskiller\Response\Exception\AttributeNotExistException;
 
+/**
+ * Class WithAttributes
+ * @package Weskiller\Response\Traits
+ * @mixin
+ */
 abstract class WithAttributes
 {
     /** @var array */
     protected array $attributes = [];
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     * @throws AttributeNotExistException
-     */
-    public function pick(string $name)
-    {
-        if (Arr::exists($this->attributes, $name)) {
-            return Arr::get($this->attributes, $name);
-        }
-        throw new AttributeNotExistException(sprintf(
-            'attribute %s->%s does not exist.', static::class, $name
-        ));
-    }
 
     /**
      * @param string $name
@@ -67,5 +55,14 @@ abstract class WithAttributes
     public function __unset($names)
     {
         Arr::forget($this->attributes, $names);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 }
