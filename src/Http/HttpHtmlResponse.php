@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Weskiller\Response\Http;
 
 
-use Weskiller\Response\Contracts\Responseable;
+use Illuminate\Contracts\Support\Renderable;
 
-abstract class HttpHtmlResponse extends HttpResponse implements Responseable
+abstract class HttpHtmlResponse extends HttpResponse implements Renderable
 {
 }

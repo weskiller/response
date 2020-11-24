@@ -8,7 +8,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Stringable;
 use Weskiller\Support\Json\Translator;
 
-abstract class JsonWebsocketResponse
+abstract class WebsocketJsonResponse
     extends WebSocketResponse
     implements Stringable, Arrayable
 {
@@ -22,10 +22,11 @@ abstract class JsonWebsocketResponse
     }
 
     /**
-     * @return array
+     * @return string
+     * @throws
      */
-    public function toArray()
+    public function toJson() :string
     {
-        return $this->payload->toArray();
+        return Translator::encode($this->toArray());
     }
 }

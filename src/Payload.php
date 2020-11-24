@@ -9,11 +9,12 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Stringable;
 use Throwable;
+use Weskiller\Response\Contracts\PayloadInterface;
 use Weskiller\Response\Contracts\Signalable;
 use Weskiller\Response\Exception\ThrowablePayload;
 use Weskiller\Support\Json\Translator;
 
-class Payload implements Stringable, Arrayable, Jsonable
+class Payload implements Stringable, Arrayable, Jsonable,PayloadInterface
 {
     /** @var Signalable */
     public Signalable $signal;
@@ -32,7 +33,7 @@ class Payload implements Stringable, Arrayable, Jsonable
      *
      * @return ThrowablePayload
      */
-    public function toThrowable(Throwable $previous = null)
+    public function toThrowable(Throwable $previous = null): ThrowablePayload
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
         return new ThrowablePayload($this, $backtrace, $previous);
@@ -53,7 +54,7 @@ class Payload implements Stringable, Arrayable, Jsonable
      * @return string
      * @throws
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0) :string
     {
         return Translator::encode($this->toArray());
     }
@@ -99,5 +100,21 @@ class Payload implements Stringable, Arrayable, Jsonable
     public function content(string $name)
     {
         return Arr::get($this->contents, $name);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getContents(): ?array
+    {
+        return $this->contents;
+    }
+
+    /**
+     * @return Signalable
+     */
+    public function getSignal(): Signalable
+    {
+        return $this->signal;
     }
 }

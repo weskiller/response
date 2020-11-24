@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Weskiller\Response\Http;
 
 
+use Weskiller\Response\Contracts\PayloadInterface;
 use Weskiller\Response\Contracts\Responseable;
-use Weskiller\Response\Payload;
 
 abstract class HttpResponse implements Responseable
 {
     /** @var int */
     protected int $httpStatusCode;
 
-    /** @var Payload */
-    protected Payload $payload;
+    /** @var PayloadInterface */
+    protected PayloadInterface $payload;
 
-    public function __construct(int $httpStatusCode, Payload $payload)
+    public function __construct(int $httpStatusCode, PayloadInterface $payload)
     {
         $this->httpStatusCode = $httpStatusCode;
         $this->payload = $payload;

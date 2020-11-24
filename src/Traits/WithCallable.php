@@ -17,7 +17,7 @@ trait WithCallable
      *
      * @return $this
      */
-    public function register(string $name, callable $callable)
+    public function register(string $name, callable $callable): self
     {
         Arr::set($this->callables, $name, $callable);
         return $this;
