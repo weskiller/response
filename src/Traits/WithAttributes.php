@@ -12,7 +12,7 @@ use Illuminate\Support\Arr;
  * @package Weskiller\Response\Traits
  * @mixin
  */
-abstract class WithAttributes
+trait WithAttributes
 {
     /** @var array */
     protected array $attributes = [];
