@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Weskiller\Response\Traits;
 
 
-use BadMethodCallException;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Traits\Macroable;
 use Weskiller\Support\Collection;
+use Weskiller\Support\Exception\AttributeNotExistException;
 
 /**
  * Class WithAttributes
@@ -19,8 +20,8 @@ trait WithAttributes
 {
     use Macroable;
 
-    /** @var Collection|null */
-    protected ?Collection $attributes = null;
+    /** @var array */
+    protected array $attributes = [];
 
     /**
      * @param string $name
@@ -30,16 +31,16 @@ trait WithAttributes
      */
     public function __get(string $name)
     {
-        return $this->getAttributes()->offsetGet($name);
+        return Arr::get($this->attributes,$name);
     }
 
     /**
      * @param string $name
-     * @param $data
+     * @param $value
      */
-    public function __set(string $name, $data)
+    public function __set(string $name, $value)
     {
-        $this->getAttributes()->offsetSet($name,$data);
+        Arr::get($this->attributes,$name,$value);
     }
 
     /**
@@ -49,7 +50,7 @@ trait WithAttributes
      */
     public function __isset(string $name)
     {
-        return $this->getAttributes()->offsetExists($name);
+        return Arr::exists($this->attributes,$name);
     }
 
     /**
@@ -58,33 +59,48 @@ trait WithAttributes
      */
     public function __unset($name)
     {
-        $this->getAttributes()->offsetUnset($name);
+        return Arr::first($this->attributes,$name);
     }
 
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getAttributes(): Collection
+    public function getAttributes(): array
     {
-        if($this->attributes = null) {
-            $this->attributes = Collection::make([]);
-        }
         return $this->attributes;
     }
 
     /**
-     * @param $method
-     * @param $parameters
-     * @return mixed
+     * @param string $name
+     * @param $value
+     * @return static
      */
-    public function __call($method, $parameters)
+    public function putAttr(string $name,$value) :self
     {
-        if(!method_exists($this->attributes,$method)) {
-            throw new BadMethodCallException(sprintf(
-                'Method %s::%s does not exist.', static::class, $method
-            ));
+        $this->__set($name,$value);
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws AttributeNotExistException
+     */
+    public function getAttr(string $name)
+    {
+        return Collection::make($this->attributes)->pick($name);
+    }
+
+    /**
+     * @param array $attributes
+     * @return static
+     */
+    public function fillAttr(array $attributes) :self
+    {
+        foreach ($attributes as $name => $attribute) {
+            $this->putAttr($name,$attribute);
         }
-        return $this->getAttributes()->{$method}(...$parameters);
+        return $this;
     }
 }
