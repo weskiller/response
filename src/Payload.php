@@ -12,6 +12,7 @@ use Throwable;
 use Weskiller\Response\Contracts\PayloadInterface;
 use Weskiller\Response\Contracts\Signalable;
 use Weskiller\Response\Exception\ThrowablePayload;
+use Weskiller\Support\Collection;
 use Weskiller\Support\Json\Translator;
 
 class Payload implements Stringable, Arrayable, Jsonable,PayloadInterface
@@ -64,7 +65,7 @@ class Payload implements Stringable, Arrayable, Jsonable,PayloadInterface
      */
     public function toArray(): array
     {
-        return collect($this->contents)->toArray();
+        return Collection::make($this->contents)->toArray();
     }
 
     /**
