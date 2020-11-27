@@ -32,12 +32,19 @@ class Payload implements Stringable, Arrayable, Jsonable,PayloadInterface
     /**
      * @param Throwable|null $previous
      *
+     * @param array|null $backtrace
+     *
      * @return ThrowablePayload
      */
-    public function toThrowable(Throwable $previous = null): ThrowablePayload
-    {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
-        return new ThrowablePayload($this, $backtrace, $previous);
+    public function toThrowable(
+        Throwable $previous = null,
+        array $backtrace = null
+    ): ThrowablePayload {
+        return new ThrowablePayload(
+            $this,
+            $backtrace ?? debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT),
+            $previous
+        );
     }
 
     /**
