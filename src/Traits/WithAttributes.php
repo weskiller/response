@@ -40,7 +40,7 @@ trait WithAttributes
      */
     public function __set(string $name, $value)
     {
-        Arr::get($this->attributes,$name,$value);
+        Arr::set($this->attributes,$name,$value);
     }
 
     /**
