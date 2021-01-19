@@ -83,7 +83,7 @@ class Payload implements Stringable, Arrayable, Jsonable,PayloadInterface
     public function fill($payloads)
     {
         foreach ($payloads as $name => $payload) {
-            $this->put($name, $payloads);
+            $this->put($name, $payload);
         }
         return $this;
     }
